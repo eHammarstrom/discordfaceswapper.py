@@ -24,7 +24,7 @@ async def on_message(message):
         if len(message.attachments) > 0:
             await face_handler(message, message.attachments[0]['url'])
         else:
-            await face_handler(message, message.content.split(' ')[1])
+            await face_handler(message, message.content.strip('!face').strip('\n').strip(' '))
 
 async def face_handler(message, url):
     face_replacement = Image.open('face.png')
