@@ -9,14 +9,13 @@ Why? Joy.
 
 ## Commands
 
-All commands are prefaced with `!face`. 
+### !face _args_
 Providing no options will replace faces on image.
 
-### !face <arg>
-### `print`
+#### `print`
 Prints current replacement image.
 
-### `load <url>`
+#### `load` _url_
 Replaces the replacement image with the provided image. 
 
 _Hint:_ It's a good idea to use PNG files with a transparent background.
