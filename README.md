@@ -6,7 +6,20 @@ Why? Joy.
 
 0. Add you discord bot to your guild
 1. Set env. variable DISCORD_TOKEN="your bot token"
-2. Call via `!face <url>` or `!face <image attachment>`
+
+## Commands
+
+All commands are prefaced with `!face`. 
+Providing no options will replace faces on image.
+
+### !face <arg>
+### `print`
+Prints current replacement image.
+
+### `load <url>`
+Replaces the replacement image with the provided image. 
+
+_Hint:_ It's a good idea to use PNG files with a transparent background.
 
 ## Examples
 
