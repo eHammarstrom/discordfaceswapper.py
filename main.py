@@ -65,12 +65,7 @@ async def face_replace_handler(message, url):
         temp = temp.resize((w, int(height)))
         img_final.paste(temp, (x, y), mask=temp)
 
-    img_file.seek(0)
-    img_final.save(img_file, 'jpeg')
-    img_file.name = 'test.jpg'
-    img_file.seek(0)
-
-    await client.send_file(message.channel, img_file)
+    await client.send_file(message.channel, image_to_mem_buf(img_final, 'png'))
 
 #
 # Retrieves all coordinates of faces on given image
