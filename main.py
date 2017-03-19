@@ -61,7 +61,22 @@ async def face_replace_handler(message, url):
     img_file = BytesIO(response.content)
     img_final = Image.open(img_file)
 
-    for (x, y, w, h) in retrieve_faces(BytesIO(response.content)):
+    faces = retrieve_faces(BytesIO(response.content))
+
+    if len(faces) < 1:
+        x = int(img_final.width / 2) - int(img_face_replace.width / 2)
+        y = img_final.height - int(img_face_replace.height / 2)
+
+        await client.send_file(message.channel, 
+                image_to_mem_buf(image_place(
+                    img_final,
+                    img_face_replace,
+                    (x, y, img_face_replace.width, img_face_replace.height),
+                    0), 'png'))
+
+        return
+
+    for (x, y, w, h) in faces:
         eyes = retrieve_eyes_on_face(
                 BytesIO(response.content), x, y, w, h)
 
@@ -75,13 +90,24 @@ async def face_replace_handler(message, url):
         else:
             deg = 180 # for giggles
 
-        temp = img_face_replace
         height = h * (img_face_replace.height/img_face_replace.width)
-        temp = temp.resize((w, int(height)))
-        temp = temp.rotate(deg, resample=Image.BICUBIC)
-        img_final.paste(temp, (x, y), mask=temp)
+
+        img_final = image_place(img_final,
+                img_face_replace,
+                (x, y, w, int(height)),
+                deg)
 
     await client.send_file(message.channel, image_to_mem_buf(img_final, 'png'))
+
+#
+# Superimpose image on image given position and rotation
+#
+def image_place(main_image, place_image, xywh_tup, deg):
+    place_image = place_image.resize((xywh_tup[2], xywh_tup[3]))
+    place_image = place_image.rotate(deg, resample=Image.BICUBIC)
+    main_image.paste(place_image, (xywh_tup[0], xywh_tup[1]), mask=place_image)
+
+    return main_image
 
 #
 # Retrieves all coordinates of faces on given image
